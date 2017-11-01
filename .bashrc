@@ -1,7 +1,4 @@
 [[ -s /home/sf/.autojump/etc/profile.d/autojump.sh ]] && source /home/sf/.autojump/etc/profile.d/autojump.sh
-alias c='cat'
-alias l='ls'
-alias s='ls'
 
 # Aliases
 alias g='git'
@@ -83,6 +80,9 @@ alias gignored='git ls-files | grep "^[[:lower:]]"'
 
 # Quality of life
 alias cls='clear'
+alias c='cat'
+alias l='ls -l --color=auto'
+alias s='ls -l --color=auto'
 alias ls='ls -l --color=auto'
 alias lsa='ls -la --color=auto'
 alias work='cd /mnt/c/Projects/'
