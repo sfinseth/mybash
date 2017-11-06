@@ -16,11 +16,11 @@ For Linux:
 
 Move the file to desired location
 
-    I have cloned the repository to /mnt/c/dev/github/BetterGitBash
-    
+    I have cloned the repository to ~/projects/mybash
+
 And then run:
     
-    ln -s ~/.bashrc /mnt/c/dev/github/BetterGitBash/.bashrc
+    ln -s ~/.bashrc ~/projects/mybash/.bashrc
 
 run: source ~/.bashrc
 
