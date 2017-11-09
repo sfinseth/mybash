@@ -1,5 +1,3 @@
-[[ -s /home/sf/.autojump/etc/profile.d/autojump.sh ]] && source /home/sf/.autojump/etc/profile.d/autojump.sh
-
 # Aliases
 alias g='git'
 alias gst='git status -s'
@@ -41,6 +39,7 @@ alias grh='git reset HEAD'
 alias grhh='git reset HEAD --hard'
 alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
+alias gsup='git standup'
 
 # remove the gf alias
 alias gf='git ls-files | grep'
@@ -86,22 +85,18 @@ alias s='ls -l --color=auto'
 alias ls='ls -l --color=auto'
 alias lsa='ls -la --color=auto'
 alias work='cd /mnt/c/Projects/'
+alias pip='pip3'
 
-# Open windows programs
-function chrome {
-    /mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe $1 &
-}
-alias vs='if [ -e $(basename `pwd`).sln ]; then explorer.exe $(basename `pwd`).sln; else /mnt/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Professional/Common7/IDE/devenv.exe & fi'
-alias npp='/mnt/c/Program\ Files/Notepad++/notepad++.exe &'
-alias od='explorer.exe .'
+# Open folder in Files
+alias od='xdg-open . &'
 
-# Open current repository location in github web
-function github {
-    origin=$(git config --get remote.origin.url)
-    branch=$(current_branch)
-    path=$(pwd | awk -F "/" '{$1=$2=$3=$4=$5=$6=""; print $0 }' | awk '$1=$1' | tr " " "/")
-    chrome ${origin::-4}"/tree/"$branch"/"$path
-}
+# Opxdg-open current repository location in github web
+# function github {
+#     origin=$(git config --get remote.origin.url)
+#     branch=$(current_branch)
+#     path=$(pwd | awk -F "/" '{$1=$2=$3=$4=$5=$6=""; print $0 }' | awk '$1=$1' | tr " " "/")
+#     open_website ${origin::-4}"/tree/"$branch"/"$path
+# }
 
 # List which files are different between current and specified branch
 function gfd { #git-file-diff
