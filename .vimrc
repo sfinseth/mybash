@@ -77,6 +77,7 @@ let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 let python_highlight_all=1
+let g:syntastic_yaml_checkers = ['yamllint']
 syntax on
 
 if has('gui_running')
@@ -86,3 +87,8 @@ else
   colorscheme zenburn
 endif
 call togglebg#map("<F5>")
+
+:command-bang Q q<bang>
+:command-bang W w<bang>
+:command-bang Wq wq<bang>
+:command-bang WQ wq<bang>

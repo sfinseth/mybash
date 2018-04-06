@@ -1,9 +1,11 @@
+[[ -s /home/finseth/.autojump/etc/profile.d/autojump.sh ]] && source /home/finseth/.autojump/etc/profile.d/autojump.sh
+
 # Aliases
 alias g='git'
 alias gst='git status -s'
 alias gd='git diff'
 alias gdc='git diff --cached'
-alias gdt='git difftool'
+alias gdt='git difftool -y'
 alias gl='git pull'
 alias glr='git pull --rebase'
 alias gp='git push'
@@ -45,6 +47,7 @@ alias gsup='git standup'
 alias gf='git ls-files | grep'
 
 alias gpoat='git push origin --all & git push origin --tags'
+alias gpft='git push --follow-tags'
 alias gmt='git mergetool --no-prompt'
 
 alias gg='git gui citool'
@@ -84,7 +87,10 @@ alias l='ls -lh --color=auto'
 alias s='ls -lh --color=auto'
 alias ls='ls -lh --color=auto'
 alias lsa='ls -lah --color=auto'
-alias work='cd /mnt/c/Projects/'
+alias oase='cd ~/Projects/OASe/'
+alias devops='cd ~/Projects/DevOps/'
+alias odp='cd ~/Projects/ODP/'
+alias ott='cd ~/Projects/OTT/'
 alias pip='pip3'
 alias lxl='lxc list -c ns4tS'
 alias tb='nc termbin.com 9999'
@@ -93,13 +99,35 @@ alias tbc='nc termbin.com 9999 | xclip -selection c'
 # Open folder in Files
 alias od='xdg-open . &'
 
+# SSH Tunnel
+function tnl {
+  ssh -fNL $2:localhost:$2 $1
+}
+
+# List all Tunnels
+function ltnl {
+  ps -ax | grep fNL | grep -v "grep"
+}
+
+# Kill all Tunnels
+function ktnl {
+  ps -ax | grep fNL | grep -v "grep" | awk '{print $1}' | xargs kill
+}
+
+# gnupg key handling
+SSH_AUTH_SOCK=/run/user/$(id -u)/gnupg/S.gpg-agent.ssh
+
 # Opxdg-open current repository location in github web
-# function github {
-#     origin=$(git config --get remote.origin.url)
-#     branch=$(current_branch)
-#     path=$(pwd | awk -F "/" '{$1=$2=$3=$4=$5=$6=""; print $0 }' | awk '$1=$1' | tr " " "/")
-#     open_website ${origin::-4}"/tree/"$branch"/"$path
-# }
+function web {
+  git_root=$(git rev-parse --show-toplevel)
+  cur_dir=$(pwd)
+  git_path=${cur_dir#$git_root} 
+  origin=$(git config --get remote.origin.url)
+  origin=${origin/://}
+  branch=$(current_branch)
+  git_url="https://"${origin:4:-4}"/tree/"${branch}${git_path}
+  google-chrome "${git_url}" 2>/dev/null
+}
 
 # List which files are different between current and specified branch
 function gfd { #git-file-diff
@@ -196,7 +224,7 @@ function gnuke {
 }
 
 # Pull all changes from all repositories in folder
-alias ggpall='find . -type d -mindepth 1 -maxdepth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin alpha \;'
+alias ggpall='find . -type d -mindepth 1 -maxdepth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;'
 
 
 # My awesome bash prompt
@@ -305,4 +333,4 @@ function prompt_command() {
   PS1="$PS1 \$ "
 }
 
-PROMPT_COMMAND="prompt_command"
+PROMPT_COMMAND="prompt_command; history -a"
