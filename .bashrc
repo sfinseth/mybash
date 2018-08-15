@@ -96,6 +96,14 @@ alias lxl='lxc list -c ns4tS'
 alias tb='nc termbin.com 9999'
 alias tbc='nc termbin.com 9999 | xclip -selection c'
 
+function lxcon {
+  lxc exec $1 -- sudo --login --user ubuntu
+}
+
+function lxfp {
+  lxc file push $2 $1/$3
+}
+
 # Open folder in Files
 alias od='xdg-open . &'
 
@@ -299,6 +307,15 @@ function prompt_git() {
   echo "$c1[$c0$output$c1]$c9"
 }
 
+function prompt_venv() {
+  if test -z "$VIRTUAL_ENV" ; then
+    output=""
+   else
+     output="$c1[$c0`basename \"$VIRTUAL_ENV\"`$c1]"
+   fi
+   echo $output
+}
+
 # Maintain a per-execution call stack.
 prompt_stack=()
 trap 'prompt_stack=("${prompt_stack[@]}" "$BASH_COMMAND")' DEBUG
@@ -327,7 +344,7 @@ function prompt_command() {
   PS1="$PS1$c1[$c0\u$c1@$c0\h$c1:$c0\w$c1]$c9"
   PS1="$PS1\n"
   # date: [HH:MM:SS]
-  PS1="$PS1$c1[$c0$(date +"%H$c1:$c0%M$c1:$c0%S")$c1]$c9"
+  PS1="$PS1$(prompt_venv)$c1[$c0$(date +"%H$c1:$c0%M$c1:$c0%S")$c1]$c9"
   # exit code: 127
   PS1="$PS1$(prompt_exitcode "$exit_code")"
   PS1="$PS1 \$ "
