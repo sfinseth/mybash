@@ -57,7 +57,7 @@ inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 
-au BufRead,BufNewFile *.py 
+autocmd BufRead,BufNewFile silent! *.py 
     set tabstop=4
     set softtabstop=4
     set shiftwidth=4
@@ -66,7 +66,7 @@ au BufRead,BufNewFile *.py
     set autoindent
     set fileformat=unix
 
-au BufRead,BufNewFile *.js, *.html, *.css
+autocmd BufRead,BufNewFile silent! *.js, *.html, *.css
     set tabstop=2
     set softtabstop=2
     set shiftwidth=2
@@ -79,14 +79,6 @@ map <leader>g :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let python_highlight_all=1
 let g:syntastic_yaml_checkers = ['yamllint']
 syntax on
-
-if has('gui_running')
-  set background=dark
-  colorscheme solarized
-else
-  colorscheme zenburn
-endif
-call togglebg#map("<F5>")
 
 :command-bang Q q<bang>
 :command-bang W w<bang>

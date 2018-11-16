@@ -1,6 +1,7 @@
-[[ -s /home/finseth/.autojump/etc/profile.d/autojump.sh ]] && source /home/finseth/.autojump/etc/profile.d/autojump.sh
-
 # Aliases
+alias py=python3
+alias py2=python
+alias pip=pip3
 alias g='git'
 alias gst='git status -s'
 alias gd='git diff'
@@ -43,6 +44,8 @@ alias gclean='git reset --hard && git clean -dfx'
 alias gwc='git whatchanged -p --abbrev-commit --pretty=medium'
 alias gsup='git standup'
 
+alias myip='curl -s https://ipv4.myip.info/ | pbcopy'
+
 # remove the gf alias
 alias gf='git ls-files | grep'
 
@@ -83,15 +86,10 @@ alias gignored='git ls-files | grep "^[[:lower:]]"'
 # Quality of life
 alias cls='clear'
 alias c='cat'
-alias l='ls -lh --color=auto'
-alias s='ls -lh --color=auto'
-alias ls='ls -lh --color=auto'
-alias lsa='ls -lah --color=auto'
-alias oase='cd ~/Projects/OASe/'
-alias devops='cd ~/Projects/DevOps/'
-alias odp='cd ~/Projects/ODP/'
-alias ott='cd ~/Projects/OTT/'
-alias pip='pip3'
+alias l='ls -lh'
+alias s='ls -lh'
+alias ls='ls -lh'
+alias lsa='ls -lah'
 alias lxl='lxc list -c ns4tS'
 alias tb='nc termbin.com 9999'
 alias tbc='nc termbin.com 9999 | xclip -selection c'
@@ -350,4 +348,23 @@ function prompt_command() {
   PS1="$PS1 \$ "
 }
 
-PROMPT_COMMAND="prompt_command; history -a"
+#PROMPT_COMMAND="prompt_command; history -a"
+
+SSH_ENV="$HOME/.ssh/environment"
+
+function start_agent {
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    /usr/bin/ssh-add -A &> /dev/null;
+}
+
+# Source SSH settings, if applicable
+if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+        start_agent;
+    }
+else
+    start_agent;
+fi
