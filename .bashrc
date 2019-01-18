@@ -102,6 +102,34 @@ function lxfp {
   lxc file push $2 $1/$3
 }
 
+# tdc-ssh
+function tssh {
+  DOMAIN=''
+
+  host $1.yousee.idk 2>&1 >/dev/null
+  if [ $? == 0 ]; then
+    DOMAIN='.yousee.idk'
+  fi
+
+  HOST=$1$DOMAIN
+
+  # Variable to grep password from keychain
+  SSHPASSWORD=$(security find-generic-password -l TDC_LDAP -gw)
+
+  # Test if host exist in tdc_keyadded, otherwise we will transfer it with ssh-copy-id
+  grep $HOST ~/.ssh/tdc_keyadded >/dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    sshpass -p"$SSHPASSWORD" ssh-copy-id -i ~/.ssh/id_tdc-rsa.pub $HOST >/dev/null 2>&1
+    echo $HOST | tee -a ~/.ssh/tdc_keyadded >/dev/null 2>&1
+  fi
+
+  # We now try to ssh with public key only, if that fails we will use sshpass to log us in
+  ssh -o PreferredAuthentications=publickey -o PubkeyAuthentication=yes $HOST
+  if [ $? -ne 0 ]; then
+    sshpass -p"$SSHPASSWORD" ssh sf@$HOST
+  fi
+}
+
 # Open folder in Files
 alias od='xdg-open . &'
 
@@ -130,9 +158,11 @@ function web {
   git_path=${cur_dir#$git_root} 
   origin=$(git config --get remote.origin.url)
   origin=${origin/://}
+  origin=${origin:4}
+  origin=${origin%????}
   branch=$(current_branch)
-  git_url="https://"${origin:4:-4}"/tree/"${branch}${git_path}
-  google-chrome "${git_url}" 2>/dev/null
+  git_url="https://"${origin}"/tree/"${branch}${git_path}
+  open -a "Google Chrome" ${git_url}
 }
 
 # List which files are different between current and specified branch
@@ -169,6 +199,10 @@ function gsc {
 function gcp {
   gsc $1
   git push
+}
+
+function gpsu {
+  git push --set-upstream origin $(current_branch)
 }
 
 # Lists all unmerged changes in all branches
@@ -348,7 +382,7 @@ function prompt_command() {
   PS1="$PS1 \$ "
 }
 
-#PROMPT_COMMAND="prompt_command; history -a"
+PROMPT_COMMAND="prompt_command; history -a"
 
 SSH_ENV="$HOME/.ssh/environment"
 
