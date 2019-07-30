@@ -89,6 +89,7 @@ alias c='cat'
 alias l='ls -lh'
 alias s='ls -lh'
 alias ls='ls -lh'
+alias ll='ls -lh'
 alias lsa='ls -lah'
 alias lxl='lxc list -c ns4tS'
 alias tb='nc termbin.com 9999'
@@ -402,3 +403,8 @@ if [ -f "${SSH_ENV}" ]; then
 else
     start_agent;
 fi
+
+. ~/git-completion.bash
+export PATH=/usr/local/aws/bin:$PATH
+complete -C '/usr/local/bin/aws_completer' aws
+

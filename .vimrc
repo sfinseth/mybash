@@ -71,6 +71,8 @@ autocmd BufRead,BufNewFile silent! *.js, *.html, *.css
     set softtabstop=2
     set shiftwidth=2
 
+au FileType gitcommit setlocal tw=72
+
 set encoding=utf-8
 
 let g:ycm_autoclose_preview_window_after_completion=1
